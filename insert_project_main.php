@@ -1,0 +1,84 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['username'])){
+         $home_url = 'http://' . $_SERVER['HTTP_HOST'] .'/login.php';
+         header('Location: ' . $home_url);
+    }
+    //echo $_SESSION['username'];
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>New Project</title>
+	<link rel="stylesheet" href="trial_v2.css">
+	<script type="text/javascript">
+		function BuildFormFields($amount)
+		{
+			var
+				$container = document.getElementById('FormFields'),
+				$item, $field, $i;
+
+			$container.innerHTML = '';
+			for ($i = 0; $i < $amount; $i++) {
+				$item = document.createElement('div');
+				$item.style.margin = '20px';
+				
+				$field = document.createElement('span');
+				// $field.style.marginRight = '10px';
+				$item.appendChild($field);
+
+				$field = document.createElement('input');
+				$field.name = 'facs[' + $i + ']';
+				$field.type = 'number';
+				$field.min = '1001';
+				$field.placeholder = 'Faculty ID';
+				$item.appendChild($field);
+
+				$field = document.createElement('span');
+				// $field.style.margin = '0px 10px';
+				$item.appendChild($field);
+
+				$field = document.createElement('input');
+				$field.name = 'role[' + $i + ']';
+				$field.type = 'text';
+				$field.placeholder = 'Role';
+				$item.appendChild($field);
+
+				$container.appendChild($item);
+			}
+		}
+	</script> 
+</head>
+<body>
+	<div class="container">
+		<form action = "insert_project.php" method = "post">
+			<div>
+				<h3><center>New Project</center></h3>
+				<div class="input-group input-group-icon">
+					<input type="text" required="required" name="name" placeholder="Project Name"/>
+					<div class="input-icon"><i class="fa fa-user"></i></div>
+				</div>
+				<div class="input-group input-group-icon">
+					<input type="number" name="bug" required="required" placeholder="Budget"/>
+					<div class="input-icon"><i class="fa fa-user"></i></div>
+				</div>
+				<div class="input-group input-group-icon">
+					<input type="text" name="sp" required="required" placeholder="Sponsor"/>
+					<div class="input-icon"><i class="fa fa-user"></i></div>
+				</div>
+				<div class="input-group input-group-icon">
+					<input type="number" min="1" required="required" placeholder="No. of Faculty Involved" onkeyup="BuildFormFields(parseInt(this.value, 10));" />
+					<div id ="FormFields" ></div>
+					<div class="input-icon"><i class="fa fa-user"></i></div>
+				</div>
+				<center><input type="submit" name="Submit" style="background-color: #007e90;"></center>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

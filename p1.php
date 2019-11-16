@@ -1,15 +1,17 @@
 <html>
 	<head>
-	<link rel="stylesheet" href="phpcss.css">
-	<title>Publication Trends</title>
-</head>
+		<link rel="stylesheet" href="result.css">
+		<title>Publication Trends</title>
+	</head>
 
 <?php
 // echo "Hello World"; 
-$fid = $_GET['fid']; 	
-$yrs = $_GET['yrs'];
+$fid = $_POST['fid']; 	
+$yrs = $_POST['yrs'];
  
-$con = mysqli_connect("localhost","root","20/02/1998","cs355");
+// $con = mysqli_connect("localhost","root","20/02/1998","cs355");
+$con = mysqli_connect("db","user","test","myDb");
+
 
 // Check connection
 if(mysqli_connect_errno())
@@ -23,19 +25,40 @@ and faculty.fid = author.fid
 and adddate(publications.dop, INTERVAL '$yrs' YEAR) > curdate()
 and faculty.fid = '$fid';";
 
+$sql1 = "select fname from faculty where fid = '$fid';";
+$result1 = $con->query($sql1);
+$facname = '';
+if($result1)
+{
+	while ($row = $result1->fetch_assoc()) {
+		$facname = $row['fname'];
+	}
+}
 $result = $con->query($sql);
 
 if($result)
 {
-	echo "<table class = \"container\">";
-	echo "<tr> <th> Name </th> <th> DOP </th> <th> Paper </th> <th> Topic </th></tr>";
-	while($row = $result->fetch_assoc())
-	{
-		echo "<tr>";
-		printf("<td> %s </td> <td> %s </td> <td> %s </td> <td> %s </td>",$row["fname"], $row['dop'],$row['pname'], $row['topic']);
-		echo "</tr>";
-	}
-	echo "</table>";
+		echo "<center><h2>Trends of Companion Faculty of ". $facname . " </h2></center>";
+		echo "<center><table>";
+		echo "	<thead>
+		            <tr>
+		                <th>Paper</th>
+		                <th>Topic</th>
+		                <th>Date of Publications</th>
+		            </tr>
+    			</thead>";
+		while($row = $result->fetch_assoc())
+		{
+			echo " 	<tbody>
+			            <tr>
+			                <td>". $row['pname'] ."</td>
+			                <td>". $row['topic'] ."</td>
+		        	        <td>". $row['dop'] ."</td>
+			            </tr>
+					</tbody>";
+		}
+		echo "</table></center>";
+	echo "</article>";
 
 	$result->free();
 }
@@ -51,16 +74,25 @@ $result = $con->query($sql);
 
 if($result)
 {
-	echo "<br> <table class = \"container\">";
-	echo "<tr> <th> Topic </th> <th> Count </th></tr>";
-	while($row = $result->fetch_assoc())
-	{
-		echo "<tr>";
-		printf("<td> %s </td> <td> %d </td>", $row["topic"], $row['cnt']);
-		echo "</tr>";
-	}
-	echo "</table>";
-
+	echo "<br><center><h2>Trend over topic of research </h2></center>";
+		echo "<center><table>";
+		echo "	<thead>
+		            <tr>
+		                <th>Topic</th>
+		                <th>Count</th>
+		            </tr>
+    			</thead>";
+		while($row = $result->fetch_assoc())
+		{
+			echo " 	<tbody>
+			            <tr>
+		        	        <td>". $row["topic"] ."</td>
+		    	            <td>". $row['cnt'] ."</td>
+			            </tr>
+					</tbody>";
+		}
+		echo "</table></center>";
+	echo "</article>";
 	$result->free();
 }
 
@@ -68,4 +100,11 @@ $con->close();
 ?>
 
 
+<body>
+	<center><div class="wrapper">
+	  <span class="square individual">
+	    <a class="ninth before after" href="index.html">MAIN</a>
+	  </span>
+	</div></center>
+</body>
 </html>

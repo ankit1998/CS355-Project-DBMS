@@ -1,15 +1,17 @@
 <html>
 	<head>
-	<link rel="stylesheet" href="phpcss.css">
-	<title>Publication Trends</title>
-</head>
+		<link rel="stylesheet" href="result.css">
+		<title>Collaboration Trends</title>
+	</head>
 
 
 <?php
 // echo "Hello World"; 
-$fid = $_GET['fid']; 	
+$fid = $_POST['fid']; 	
 
-$con = mysqli_connect("localhost","root","20/02/1998","cs355");
+// $con = mysqli_connect("localhost","root","20/02/1998","cs355");
+$con = mysqli_connect("db","user","test","myDb");
+
 
 // Check connection
 if(mysqli_connect_errno())
@@ -24,25 +26,48 @@ and a2.fid = '$fid'
 and faculty.fid = a1.fid
 group by a2.fid, a1.fid;
 ";
-
+$sql1 = "select fname from faculty where fid = '$fid';";
+$result1 = $con->query($sql1);
+$facname = '';
+if($result1)
+{
+	while ($row = $result1->fetch_assoc()) {
+		$facname = $row['fname'];
+	}
+}
 $result = $con->query($sql);
 
 if($result)
 {
-	echo "<table class = \"container\" >";
-	echo "<tr> <th> Name </th> <th> Count </th></tr>";
-	while($row = $result->fetch_assoc())
-	{
-		echo "<tr>";
-		printf("<td> %s </td> <td> %d </td>",$row['fname'], $row['cnt']);
-		echo "</tr>";
-	}
-	echo "</table>";
-
+		echo "<center><h2>Collaboration Trends of " . $facname. "</h2></center>";
+		echo "<center><table>";
+		echo "	<thead>
+		            <tr>
+		                <th>Name</th>
+		                <th>Count</th>
+		            </tr>
+    			</thead>";
+		while($row = $result->fetch_assoc())
+		{
+			echo " 	<tbody>
+			            <tr>
+		        	        <td>". $row["fname"] ."</td>
+		    	            <td>". $row['cnt'] ."</td>
+			            </tr>
+					</tbody>";
+		}
+		echo "</table></center>";
+	echo "</article>";
 	$result->free();
 }
-
-	
 $con->close();
 ?>
+
+<body>
+	<center><div class="wrapper">
+	  <span class="square individual">
+	    <a class="ninth before after" href="index.html">MAIN</a>
+	  </span>
+	</div></center>
+</body>
 </html>

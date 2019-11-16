@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Project</title>
+	<link rel="stylesheet" href="trial_v2.css">
+	<script language="Javascript">
+       	function hideA(x)
+       	{
+		   	if (x.checked)
+		   	{
+		     	document.getElementById("A").style.display = "none";
+	     		document.getElementById("B").style.	display = "block";
+	   		}
+	 	}
+
+	 	function hideB(x) 
+	 	{
+		   if (x.checked) 
+		   	{
+				document.getElementById("B").style.display = "none";
+				document.getElementById("A").style.display = "block";
+	   		}
+		}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<form action = "proquery.php" method = "post">
+			<div class="row">	
+				<h3><center>Projects</center></h3>
+				<div class="middle">
+					<label>
+						<input type="radio" onchange="hideB(this)" name="radio" checked/>
+							<div class="front-end box">
+								<span>Project ID</span>
+							</div>
+					</label>
+
+					<label>
+						<input type="radio" onchange="hideA(this)" name="radio"/>
+							<div class="back-end box">
+								<span>ALL</span>
+							</div>
+					</label>
+				</div>
+				<div id="A">
+					<br>
+					<div class="input-group input-group-icon">
+						<input type="number" name="pid" placeholder="Project ID"></input>
+						<div class="input-icon"><i class="fa fa-user"></i></div>
+					</div>
+				</div>
+				<div id="B" style="display:none"><br>
+				</div>
+				<div>		
+					<center><input type="submit" name="Submit" style="background-color: #007e90;"></center>
+				</div>
+		</form>
+	</div>
+</body>
+</html>
